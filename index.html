@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en"></html>
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+  <meta name="description" content="Data Visualization by Team Gravy at Quantify Datathon 2017. The Data is based on AirBnb data, and the visualization is built by LeafletJS and D3.js.">
+  <title>Team Gravy Data Visualization - Quantify Datathon 2017</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans"/>
+  <link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Cantarell" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css"/>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v0.35.1/mapbox-gl.css"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/forest-d3.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.18/c3.css">
+  <!-- <link rel="stylesheet" href="css/forest-d3-dark.css"/> -->
+  <link rel="stylesheet" href="css/custom.css"/>
+  <meta property="og:title" content="Team Gravy Data Visualization - Quantify Datathon 2017" />
+  <meta property="og:description" 
+    content="Data Visualization by Team Gravy at Quantify Datathon 2017. The Data is based on AirBnb data, and the visualization is built by LeafletJS and D3.js." />
+  <meta property="og:image" content="http://byperth.com/quantify/img/teamgravy.png" />
+</head>
+<body>
+  
+  <div id="suburb_name"></div>
+  <div id="choro"></div>
+
+  <div id="frame_invest">
+    <h3>Types of properties you can afford ($USD)</h3>
+    <div id="chart_invest_hp" style="height: 250px; width: 100%;">
+      <div class="chart_blank">
+        <div class="chart_blank_center">
+          <img src="img/bar-chart.png" alt="" style="width: 90px; height: auto;">
+          <p style="margin-top: 10px;">Try our investment tool <i class="fa fa-arrow-right"></i></p>
+        </div>
+      </div>
+    </div>
+    <h3>Forecast of people staying in this city</h3>
+    <div id="chart_visitor_ts" style="height: 250px; width: 100%;">
+      <div class="chart_blank">  
+        <div class="chart_blank_center">
+          <img src="img/line-chart.png" alt="" style="width: 80px; height: auto;">
+          <p style="margin-top: 10px;">Try our investment tool <i class="fa fa-arrow-right"></i></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="frame_income">
+    <h2>Top 10 Amenities in this area</h2>
+    <div class="income_icons">
+      <div class="income_values">
+        <div class="income_val_kitchen">-</div>
+        <div class="income_val_wifi">-</div>
+        <div class="income_val_washer">-</div>
+        <div class="income_val_shampoo">-</div>
+        <div class="income_val_essentials">-</div>
+        <div class="income_val_smoke">-</div>
+        <div class="income_val_tv">-</div>
+        <div class="income_val_aircon">-</div>
+        <div class="income_val_freepark">-</div>
+        <div class="income_val_heating">-</div>
+      </div>
+      <img src="img/income_icons.png">
+    </div>
+  </div>
+
+  <div id="frame_white"></div>
+
+  <div id="sidebar">
+    <div class="page_box">
+      <ul class="main-menu">
+        <li>
+          <a href="#title" class="active">EXPLORE THE CITY</a>
+        </li>
+        <li>
+          <a href="#invest_box">CALCULATOR</a>
+        </li>
+        <li>
+          <a href="#credit_box">ABOUT</a>
+        </li>
+      </ul>
+
+      <h1 id="title">Where to invest in Victoria</h1>
+      <img src="img/lv1_stat.png" style="width: 100%; height: auto; margin-top: -20px; margin-bottom: -10px;">
+      <p>Investors has been experiencing a massive growth in income produced from rooms and properties on AIRBNB in Melbourne. This can be seen to grow over the next few years.</p>
+      <h3 style="margin-bottom: 10px">Total Income from AirBnb in Victoria Region ($USD)</h3>
+      <div id="chart_lv1_income" style="width: 100%; height: 280px;"></div>
+    </div>
+    
+    <div class="page_box">
+      <h2 id="cityname">Should I invest in <span id="input_cityname"></span></h2>
+      <p>There are restaurants and attractions within these places. This also means potential business partnership. By bringing in travellers, you may be able to form partnerships with restaurants and attraction locations and benefit from commissions.</p>
+      <div class="row-flex">
+        <div class="icon-group">
+          <img src="img/icon-restaurant.png" alt="" class="icon-group-icon">
+          <div class="icon-title">RESTAURANTS</div>
+          <span id="lv2_res">0</span> places
+        </div>
+        <div class="icon-group">
+          <img src="img/icon-attraction.png" alt="" class="icon-group-icon">
+          <div class="icon-title">ATTRACTIONS</div>
+          <span id="lv2_attr">0</span> places
+        </div>
+      </div>
+      <h3 style="margin-top: 50px;">AirBnb Income for each type of house ($USD)</h3>
+      <div id="chart_lv2_income" style="height: 300px; width: 100%;"></div>
+    </div>
+
+
+    <div class="page_box">
+      <h2 style="margin-bottom: -10px;">Calculate your investment</h2>
+      <p>If you have a specific amount of money you would like to use to in a property, please use the tool below to enter your investment amount. It will provide you an overview of the property types you could invest in and the trend of visitor in your city of interest.</p>
+      <div class="invest_box" id="invest_box">
+        <h2>Investment Calculator</h2>
+        <form action="" id="form_invest">
+            I want to invest $USD <input type="text" placeholder="0" class="input_invest" id="input_invest">K in <select id="input_city" class="input_city">
+            </select>.<br>
+            <button id="calculate_invest">CALCULATE</button>
+
+            <div class="invest_ans">
+              Your investment can purchase:
+              <ul class="invest_list">
+              </ul>
+            </div>
+
+            <p style="font-size: 11px; color: #666;">We recommend you using <a href="https://www.realestate.com.au/buy" target="_blank">realestate.com.au</a> to identify the types of properties you might like to invest in.</p>
+          </form>
+      </div>
+
+      <div class="scrolldown">
+        Scroll down for the income calculator <i class="fa fa-chevron-down"></i>
+      </div>
+    </div>
+  
+    <div class="page_box" id="page_income_box">
+      <div class="invest_box" id="income_box">
+        <h2 style="margin-bottom: 0">Calculate your income</h2>
+        <p>The tool below allows you to determine the amount of money you could make a month by investing or lending a room out to AIRBNB. You can enter the room type, number of bedrooms and the specific suburb of interest. The types of amenities you can provide could also be factored into the price by looking at what is offered in that area.</p>
+        <form action="" id="form_invest">
+          My room type would be <select id="input_proptype" class="input_suburb">
+            <option value="entire">Entire House/Apt</option>  
+            <option value="private">Private Room</option>  
+            <option value="shared">Shared Room</option>  
+          </select> with <input type="text" class="input_bedrooms" id="input_bedrooms" placeholder="1-10"> bedrooms in <select id="input_suburb" class="input_suburb"></select><br>
+
+          <div class="input_amenities" style="margin-top: 10px">
+            I will provide:
+            <div class="row">
+              <div class="col-50">
+                <input class="styled-checkbox" id="kitchen" type="checkbox" value="1">
+                <label for="kitchen">Kitchen</label>
+              </div>
+              <div class="col-50">
+                <input class="styled-checkbox" id="smoke" type="checkbox" value="1">
+                <label for="smoke">Smoke Detector</label>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-50">
+                    <input class="styled-checkbox" id="wifi" type="checkbox" value="1">
+                    <label for="wifi">WiFi</label>
+                  </div>
+                  <div class="col-50">
+                    <input class="styled-checkbox" id="tv" type="checkbox" value="1">
+                    <label for="tv">TV</label>
+                  </div>
+            </div>
+            <div class="row">
+              <div class="col-50">
+                <input class="styled-checkbox" id="washer" type="checkbox" value="1">
+                <label for="washer">Washer</label>
+              </div>
+              <div class="col-50">
+                <input class="styled-checkbox" id="aircon" type="checkbox" value="1">
+                <label for="aircon">Air Condition</label>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-50">
+                    <input class="styled-checkbox" id="shampoo" type="checkbox" value="1">
+                    <label for="shampoo">Shampoo</label>
+                  </div>
+                  <div class="col-50">
+                    <input class="styled-checkbox" id="freepark" type="checkbox" value="1">
+                    <label for="freepark">Free Parking</label>
+                  </div>
+            </div>
+            <div class="row">
+              <div class="col-50">
+                <input class="styled-checkbox" id="essentials" type="checkbox" value="1">
+                <label for="essentials">Essentials</label>
+              </div>
+              <div class="col-50">
+                <input class="styled-checkbox" id="heating" type="checkbox" value="1">
+                <label for="heating">Heating</label>
+              </div>
+            </div>
+          </div>
+
+          <button id="calculate_income" style="margin-top: 10px">CALCULATE</button>
+
+          <div class="income_ans">
+            You are expected to get an income $USD <strong id="invest_output" class="odometer">0</strong> / month.
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="credit_box" id="credit_box">
+    <div class="wrapper">
+      <h2>About this project</h2>
+      <img src="img/jeno-face.png" alt="" style="width: 120px; height: auto; float: left; margin-right: 20px;">
+      <p>This visualisation is a part of Team Gravy at the Quantify Datathon 2017. We wanted to present a tool you could use to determine whether you should invest in properties for AIRBNB. We are made up of 4 highly enthusiastic and curious Data Science Students.</p>
+      <p>Video Presentation is available on <a href="https://www.youtube.com/watch?v=AEesHawofZg&feature=youtu.be">YouTube</a></p>
+      <div style="clear: both"></div>
+      <h2>Data Sources</h2>
+      <ul>
+        <li><a href="http://insideairbnb.com/get-the-data.html">Inside AirBnb</a></li>
+        <li><a href="http://www.realestate.com.au">RealEstate Investment Data</a></li>
+        <li><a href="http://www.google.com">Google Places API</a></li>
+      </ul>
+
+      <div class="copyright">
+        <p class="cpr_left">
+          Team Gravy (Jeno T., Yung-Chya K., Bharathdk K., Woratana N.) - Quantify Datathon 2017.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3plus/1.9.8/d3plus.full.min.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.3/chroma.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+  <script src="js/data.js"></script>
+  <!-- <script src="data/melbsuburbs.js"></script> -->
+  <script src="data/newgeofinal.js"></script>
+  <script src="js/forest-d3.js"></script>
+  <script src="js/c3.min.js"></script>
+  <script src="js/jquery.animateNumber.min.js"></script>
+  <script src="js/app.js"></script>
+  </script>
+</body>

@@ -1,0 +1,620 @@
+/**
+ * How the code is organized in this CSS file:
+ * > Common CSS
+ * > Header & Footer CSS
+ * > CSS for step 1 - 4 plots
+ */
+body, html {
+  font-family: 'Cantarell', sans-serif;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: #5193C1;
+}
+
+hr.divider {
+  height: 10px;
+  border: 0;
+  box-shadow: 0 10px 10px -10px #8c8b8b inset;
+  background: transparent;
+}
+
+.is-dark p {
+  color: #eee;
+}
+
+.is-dark small {
+  color: #ccc;
+}
+
+#d3plus_back_button {
+  border: 1px solid #D1D1D1;
+  border-radius: 3px;
+  padding: 5px;
+  background: #fff;
+}
+
+.d3plus_line {
+  stroke-width: 2px !important;
+}
+
+.acknow a {
+  text-decoration: underline;
+}
+
+.leaflet-popup {
+  pointer-events: none;
+}
+
+.leaflet-popup-pane {
+  opacity: 0.8;
+}
+
+.leaflet-container a {
+  color: #666;
+}
+
+.legend {
+  line-height: 18px;
+  color: #555;
+  background: #fff;
+  padding: 10px;
+  display: none;
+}
+
+.legend i {
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+  opacity: 1;
+}
+
+.fa {
+  vertical-align: middle;
+}
+
+#step1stack {
+  width: 100%;
+}
+
+.xaxeStack path,
+.xaxeStack line,
+.yaxeStack path,
+.yaxeStack line {
+  fill: none;
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+
+.xaxeStack text,
+.yaxeStack text {
+  font-family: sans-serif;
+  font-size: 13px;
+}
+
+.xaxeStack text {
+  text-anchor: end !important;
+}
+
+.yaxeStack path {
+  stroke: black;
+  stroke-width: 1px;
+}
+
+.xaxeStack line {
+  stroke: black;
+}
+
+.grid line {
+  stroke: #CCCCCC;
+  stroke-opacity: 0.7;
+  shape-rendering: crispEdges;
+}
+
+.grid path {
+  stroke-width: 0;
+  fill: transparent;
+}
+
+.tooltip {
+  position: absolute;
+  pointer-events: none;
+  color: #444444;
+  font-family: "Helvetica Neue";
+  font-weight: 400;
+  font-size: 16px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 3px;
+  z-index: 2000;
+  background: #fff;
+  padding: 10px;
+}
+
+.step1-control a {
+  text-decoration: underline;
+  font-size: 0.8em;
+  color: #666;
+}
+
+#step2tree {
+  width: 100%;
+  height: 500px;
+}
+
+#step3bar {
+  width: 100%;
+  height: 800px;
+}
+
+#step3empmore, #step3gradmore {
+  width: 100%;
+  height: 400px;
+}
+
+#step4line {
+  width: 100%;
+  height: 500px;
+}
+
+.topcomp-list {
+  background: #FAFAFA;
+  padding: 10px 20px;
+  list-style-position: inside !important;
+}
+
+.topcomp-list li {
+  transition: 0.3s;
+}
+
+.topcomp-list li:nth-child(1) {
+  font-size: 1.5em;
+}
+
+.st4-highlight {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.hide-line {
+  display: none;
+}
+
+
+
+
+/* ---------------------------- */
+/* Quantify Map                 */
+/* ---------------------------- */
+
+/* Basic elements */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Fjalla One', sans-serif;
+}
+
+h1 { font-size: 2.5em; text-transform: uppercase; }
+h2 { font-size: 2em; text-transform: uppercase;  }
+h3 { font-size: 1.8em; }
+h4 { font-size: 1.6em; }
+
+/* Layout */
+.main-menu {
+  list-style: none;
+  margin: 10px 0;
+  padding: 0;
+  text-align: left;
+}
+
+.main-menu li {
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.main-menu a {
+  text-decoration: none;
+  padding: 5px;
+}
+
+.main-menu a:hover,
+.main-menu a.active {
+  background: #5193C1;
+  color: white;
+}
+
+#choro {
+  width: 50%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+#suburb_name {
+  z-index: 2;
+  position: fixed;
+  top: 5px;
+  left: 25%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.8);
+  padding: 5px;
+  display: none;
+}
+
+#frame_invest, #frame_income {
+  width: 50%;
+  height: 100%;
+  position: fixed;
+  transform: translateY(100%);
+  background: white;
+  top: 0;
+  left: 0;
+  padding: 0 20px;
+  box-sizing: border-box;
+  transition: transform 0.5s;
+  z-index: 3;
+}
+
+#frame_income {
+  background: url(../img/bg.png) bottom center no-repeat;
+  background-size: cover;
+  z-index: 5;
+}
+
+#frame_invest.active, #frame_income.active {
+  transform: translateY(0);
+}
+
+#frame_income.active.done {
+  transform: translateY(-100%);
+}
+
+#frame_white {
+  width: 50%;
+  height: 100%;
+  position: fixed;
+  background: white;
+  top: 0;
+  left: 0;
+  padding: 0 20px;
+  transition: 0.5s;
+  z-index: 4;
+  display: none;
+}
+
+#sidebar {
+  margin-left: 50%;
+  width: 50%;
+  min-height: 100%;
+  background: white;
+  overflow: hidden;
+  padding: 0 50px 20px;
+  box-sizing: border-box;
+  /* box-shadow: 0 0 5px rgba(0,0,0,0.5); */
+  /* transform: translateX(100%); */
+  z-index: 9999;
+  transition: 0.5s;
+  opacity: 0.8;
+}
+/* 
+#sidebar.active {
+  transform: translateX(0);
+} */
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+#loading {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.disable_layer {
+  pointer-events: none !important;
+}
+
+/* LV 2 */
+#lv2_res, #lv2_attr {
+  font-size: 40px;
+  color: #3F749A;
+}
+
+/* Investment Form Box */
+.invest_ans, .income_ans {
+  margin-top: 20px;
+  padding: 10px;
+  background: #eaffea;
+  font-size: 1.2em;
+}
+
+.invest_ans.invest_list_disable {
+  background: #FFC4C4;
+}
+
+.invest_list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  padding-left: 1em;
+  color: #00690E;
+}
+
+.invest_list .disabled-result,
+.invest_list .disabled-result i {
+  color: #666;
+}
+
+.invest_list i {
+  color: #00690E;
+}
+
+.page_box {
+  min-height: 100vh;
+}
+
+.invest_box {
+  border: 1px solid #000;
+  padding: 20px;
+  margin-bottom: 15px;
+}
+
+.invest_box h2 {
+  margin-top: 0;
+}
+
+.input_invest {
+  padding: 10px;
+  font-size: 16px;
+  width: 3em;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.input_bedrooms {
+  padding: 10px;
+  font-size: 16px;
+  width: 2em;
+  text-align: center;
+}
+
+.input_suburb, .input_city {
+  padding: 10px;
+  font-size: 16px;
+}
+
+#invest_output {
+  color: green;
+  font-size: 30px;
+}
+
+.row {
+  overflow: hidden;
+  line-height: 2;
+}
+
+.row-flex {
+  display: flex;
+}
+
+.row-flex .icon-group {
+  flex: 1;
+}
+
+.col-50 {
+  width: 50%;
+  float: left;
+}
+
+.styled-checkbox {
+  position: absolute;
+  opacity: 0;
+}
+.styled-checkbox + label {
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+}
+.styled-checkbox + label:before {
+  content: '';
+  margin-right: 10px;
+  display: inline-block;
+  vertical-align: text-top;
+  width: 20px;
+  height: 20px;
+  background: #ccc;
+  border-radius: 50%;
+}
+.styled-checkbox:hover + label:before {
+  background: #15B300;
+}
+.styled-checkbox:focus + label:before {
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+}
+.styled-checkbox:checked + label:before {
+  background: #15B300;
+}
+.styled-checkbox:disabled + label {
+  color: #b8b8b8;
+  cursor: auto;
+}
+.styled-checkbox:disabled + label:before {
+  box-shadow: none;
+  background: #ddd;
+}
+.styled-checkbox:checked + label:after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 9px;
+  background: white;
+  width: 2px;
+  height: 2px;
+  box-shadow: 2px 0 0 white, 4px 0 0 white, 4px -2px 0 white, 4px -4px 0 white, 4px -6px 0 white, 4px -8px 0 white;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+}
+
+
+/* Time Series Charts */
+#chart_invest_hp .c3-axis-x .tick {
+  display: none;
+}
+
+.chart_blank {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  border: 2px dashed #000;
+  opacity: 0.6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chart_blank i {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.gridline-red line {
+  stroke: red;
+}
+
+.gridline-red text {
+  fill: red;
+}
+
+#chart_lv1_income {
+  padding: 10px;
+}
+
+#chart_lv1_income .c3-line,
+#chart_visitor_ts .c3-line {
+  stroke-width: 4px;
+}
+
+.forest-d3 rect.region {
+  fill-opacity: 0.1;
+}
+
+.income_icons {
+  width: 100%;
+  position: relative;
+  margin-top: -20px;
+}
+
+.income_icons img {
+  width: 100%;
+  height: auto;
+}
+
+.income_values {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.income_values div {
+  position: absolute;
+  text-align: center;
+  font-size: 60px;
+  color: white;
+}
+
+.income_val_kitchen { right: 76%; top: 6%; }
+.income_val_wifi { right: 76%; top: 20%; }
+.income_val_washer { right: 76%; top: 37%; }
+.income_val_shampoo { right: 76%; top: 53%; }
+.income_val_essentials { right: 76%; top: 68%; }
+
+.income_val_smoke { left: 76%; top: 6%; }
+.income_val_tv { left: 76%; top: 20%; }
+.income_val_aircon { left: 76%; top: 37%; }
+.income_val_freepark { left: 76%; top: 53%; }
+.income_val_heating { left: 76%; top: 68%; }
+
+/* Copyright */
+#credit_box {
+  border-top: 3px solid #000;
+  background: white;
+  z-index: 10;
+  position: relative;
+  padding-top: 20px;
+}
+
+.copyright {
+  font-size: 11px;
+  overflow: hidden;
+}
+
+.cpr_left {
+  float: left;
+  color: #666;
+}
+
+.cpr_right {
+  float: right;
+}
+
+.wrapper {
+  max-width: 1000px;
+  width: 80%;
+  margin: auto;
+}
+
+/* Utilities */
+.icon-group.icon-group {
+  float: left;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.icon-group-icon {
+  float: left;
+  display: inline-block;
+  width: 80px;
+  height: auto;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.icon-title {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  margin-top: 14px;
+}
+
+button {
+  padding: 10px;
+  font-size: 14px;
+}
+
+.scrolldown {
+  margin-top: 20px;
+  text-align: center;
+}
+
+@keyframes godown {
+  0%   { transform: translateY(-5px); }
+  100% { transform: translateY(5px);; }
+}
+
+.scrolldown i {
+  animation: godown 1s infinite;
+}
