@@ -14,6 +14,6 @@ Due to possible data license problems, I decided to remove the data files. Most 
 ### Event Details
 Team Gravy in Quantify Datathon 2017 at Monash University.
 
-**Date**: 27th September - 1st October
+**Date**: 27th September - 1st October 2017
 
 **Event Website**: http://quantify.monashdatascience.com/
